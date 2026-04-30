@@ -1,0 +1,408 @@
+/* ══════════════════════════════════════════════
+   BASE
+══════════════════════════════════════════════ */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: #f5f5f3;
+  min-height: 100vh;
+  color: #1a1a18;
+  padding: 1.5rem 1rem 3rem;
+}
+
+h1 {
+  font-size: 24px;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.sub {
+  font-size: 14px;
+  color: #888780;
+  margin-bottom: 1.75rem;
+}
+
+/* ══════════════════════════════════════════════
+   SCREENS
+══════════════════════════════════════════════ */
+.screen {
+  display: none;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.screen.active {
+  display: block;
+}
+
+/* ══════════════════════════════════════════════
+   CARD
+══════════════════════════════════════════════ */
+.card {
+  background: #fff;
+  border: 0.5px solid #dddbd4;
+  border-radius: 14px;
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+/* ══════════════════════════════════════════════
+   FORM ELEMENTS
+══════════════════════════════════════════════ */
+label {
+  display: block;
+  font-size: 11px;
+  color: #888780;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 6px;
+}
+
+input[type="text"] {
+  width: 100%;
+  height: 40px;
+  padding: 0 12px;
+  border: 0.5px solid #c4c2bb;
+  border-radius: 8px;
+  font-size: 15px;
+  background: #fff;
+  color: #1a1a18;
+  outline: none;
+  font-family: inherit;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus    { border-color: #888780; }
+input[type="text"]:disabled { background: #f5f5f3; color: #888780; }
+
+/* Room code input — larger, monospaced */
+.code-input {
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.15em;
+  font-size: 20px;
+}
+
+/* Answer input — monospaced, uppercase */
+.answer-input {
+  font-family: 'Courier New', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0;
+}
+
+button {
+  display: block;
+  width: 100%;
+  height: 40px;
+  padding: 0 18px;
+  border: 0.5px solid #c4c2bb;
+  border-radius: 8px;
+  background: #fff;
+  color: #1a1a18;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s, transform 0.1s;
+  margin-bottom: 8px;
+}
+
+button:hover    { background: #f5f5f3; }
+button:active   { transform: scale(0.97); }
+button:disabled { opacity: 0.4; cursor: default; }
+
+button.primary {
+  background: #1a1a18;
+  color: #fff;
+  border-color: #1a1a18;
+}
+button.primary:hover { background: #333; }
+
+.divider {
+  text-align: center;
+  font-size: 13px;
+  color: #888780;
+  margin: 10px 0 14px;
+}
+
+.error-msg {
+  font-size: 13px;
+  color: #993C1D;
+  min-height: 20px;
+  margin-top: 6px;
+}
+
+/* ══════════════════════════════════════════════
+   LOBBY SCREEN
+══════════════════════════════════════════════ */
+.room-code-big {
+  font-size: 40px;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  padding: 1rem;
+  background: #f5f5f3;
+  border-radius: 8px;
+  margin-bottom: 1.25rem;
+}
+
+.player-list { list-style: none; }
+
+.player-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid #f1efe8;
+  font-size: 14px;
+}
+
+.player-list li:last-child { border-bottom: none; }
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1D9E75;
+  flex-shrink: 0;
+}
+
+.host-tag {
+  font-size: 11px;
+  padding: 1px 6px;
+  background: #f1efe8;
+  color: #888780;
+  border-radius: 4px;
+}
+
+.waiting-msg {
+  text-align: center;
+  font-size: 13px;
+  color: #888780;
+  margin-top: 8px;
+}
+
+/* ══════════════════════════════════════════════
+   GAME SCREEN — TOP BAR & PROGRESS
+══════════════════════════════════════════════ */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  font-size: 13px;
+  color: #888780;
+}
+
+.topbar strong {
+  font-weight: 500;
+  color: #1a1a18;
+}
+
+.progress-track {
+  height: 4px;
+  background: #e5e3dd;
+  border-radius: 2px;
+  margin-bottom: 1.25rem;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #1D9E75;
+  border-radius: 2px;
+  transition: width 0.4s ease;
+}
+
+/* ══════════════════════════════════════════════
+   GAME SCREEN — WORD CARD
+══════════════════════════════════════════════ */
+.word-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.word-prompt {
+  font-size: 13px;
+  color: #888780;
+  margin-bottom: 0.25rem;
+}
+
+.badge {
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.badge.easy   { background: #EAF3DE; color: #3B6D11; }
+.badge.medium { background: #FAEEDA; color: #854F0B; }
+.badge.hard   { background: #FAECE7; color: #993C1D; }
+
+.scramble-row {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin: 0.75rem 0 1rem;
+}
+
+.letter-box {
+  width: 38px;
+  height: 46px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f5f5f3;
+  border: 0.5px solid #c4c2bb;
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.hint-text {
+  font-size: 13px;
+  color: #888780;
+  font-style: italic;
+  min-height: 20px;
+  margin-bottom: 0.75rem;
+}
+
+.result-text {
+  font-size: 14px;
+  font-weight: 500;
+  min-height: 20px;
+  margin-bottom: 0.75rem;
+}
+
+.input-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.input-row input  { flex: 1; }
+.input-row button { width: auto; padding: 0 16px; flex-shrink: 0; margin-bottom: 0; }
+
+.action-row { display: flex; gap: 8px; }
+.action-row button { font-size: 12px; height: 32px; margin-bottom: 0; }
+
+/* ══════════════════════════════════════════════
+   LIVE LEADERBOARD
+══════════════════════════════════════════════ */
+.lb-header {
+  font-size: 11px;
+  color: #888780;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 8px;
+}
+
+.lb-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 0.5px solid #f1efe8;
+  font-size: 14px;
+}
+
+.lb-row:last-child { border-bottom: none; }
+
+.lb-rank  { width: 20px; font-size: 12px; color: #888780; flex-shrink: 0; }
+.lb-name  { flex: 1; }
+.lb-name.me { font-weight: 500; }
+
+.lb-status {
+  font-size: 11px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.lb-status.correct { background: #EAF3DE; color: #3B6D11; }
+.lb-status.wrong   { background: #FAECE7; color: #993C1D; }
+.lb-status.pending { background: #f1efe8; color: #888780; }
+
+.lb-score {
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+  flex-shrink: 0;
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ══════════════════════════════════════════════
+   RESULTS PHASE (between words)
+══════════════════════════════════════════════ */
+.results-banner {
+  background: #fff;
+  border: 0.5px solid #dddbd4;
+  border-radius: 14px;
+  padding: 1.75rem;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.results-word {
+  font-size: 28px;
+  font-weight: 500;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.results-summary  { font-size: 14px; color: #888780; margin-bottom: 0.5rem; }
+.results-countdown { font-size: 13px; color: #888780; }
+
+/* ══════════════════════════════════════════════
+   END SCREEN
+══════════════════════════════════════════════ */
+.end-card { text-align: center; margin-bottom: 1rem; }
+
+.end-score-label {
+  font-size: 11px;
+  color: #888780;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.25rem;
+}
+
+.final-score-big {
+  font-size: 52px;
+  font-weight: 500;
+}
+
+.my-rank-label {
+  font-size: 14px;
+  color: #888780;
+  margin: 0.25rem 0 1.5rem;
+}
+
+.final-lb-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 0.5px solid #f1efe8;
+  font-size: 14px;
+  text-align: left;
+}
+
+.final-lb-row:last-child { border-bottom: none; }
+
+.f-rank  { font-size: 20px; width: 32px; text-align: center; flex-shrink: 0; }
+.f-name  { flex: 1; }
+.f-name.me { font-weight: 500; }
+.f-score { font-family: 'Courier New', monospace; font-weight: 500; }

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coding Scramble — Multiplayer</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- ══ SETUP ══ -->
+  <div id="screen-setup" class="screen active">
+    <h1>iScramble</h1>
+    <p class="sub">Guess the scrambled words</p>
+    <div class="card">
+      <label for="name-input">Your name</label>
+      <input id="name-input" type="text" placeholder="e.g. Alice" maxlength="20" />
+      <button class="primary" onclick="handleCreate()">Create Room</button>
+      <div class="divider">— or join an existing room —</div>
+      <label for="code-input">Room code</label>
+      <input id="code-input" type="text" placeholder="e.g. XK7Q" maxlength="4" class="code-input" />
+      <button onclick="handleJoin()">Join Room</button>
+      <div id="setup-error" class="error-msg"></div>
+    </div>
+  </div>
+
+  <!-- ══ LOBBY ══ -->
+  <div id="screen-lobby" class="screen">
+    <h1>Waiting Room</h1>
+    <p class="sub">Share the code — everyone opens the same link</p>
+    <div class="card">
+      <label>Room code — share this with teammates</label>
+      <div class="room-code-big" id="lobby-code">----</div>
+      <div class="lb-header" style="margin-bottom:10px;">Players joined</div>
+      <ul class="player-list" id="lobby-players"></ul>
+    </div>
+    <button class="primary" id="start-btn" style="display:none;" onclick="hostStartGame()">Start Game</button>
+    <p id="waiting-msg" class="waiting-msg">Waiting for host to start the game…</p>
+  </div>
+
+  <!-- ══ GAME ══ -->
+  <div id="screen-game" class="screen">
+    <div class="topbar">
+      <div>Score: <strong id="my-score">0</strong></div>
+      <div>Word <strong id="word-num">1</strong> / 15</div>
+      <div>Time: <strong id="timer-display">—</strong>s</div>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:6.67%"></div>
+    </div>
+
+    <!-- Word card -->
+    <div class="card" id="word-card">
+      <div class="word-card-header">
+        <span id="diff-badge" class="badge easy">Easy</span>
+      </div>
+      <p class="word-prompt">Unscramble this coding term:</p>
+      <div class="scramble-row" id="scramble-row"></div>
+      <div class="hint-text" id="hint-text"></div>
+      <div class="result-text" id="result-text"></div>
+      <div class="input-row" id="input-row">
+        <input id="answer-input" type="text" placeholder="Type your answer…" autocomplete="off" autocorrect="off" spellcheck="false" class="answer-input" />
+        <button onclick="submitAnswer()">Submit</button>
+      </div>
+      <div class="action-row" id="action-row">
+        <button id="hint-btn" onclick="useHint()">Hint (−5 pts)</button>
+        <button onclick="skipWord()">Skip</button>
+      </div>
+    </div>
+
+    <!-- Results phase (between words) -->
+    <div id="results-phase" style="display:none;">
+      <div class="results-banner">
+        <div class="results-word" id="results-word"></div>
+        <div class="results-summary" id="results-summary"></div>
+        <div class="results-countdown" id="results-countdown"></div>
+      </div>
+    </div>
+
+    <!-- Live leaderboard -->
+    <div class="card">
+      <div class="lb-header">Live standings</div>
+      <div id="lb-rows"></div>
+    </div>
+  </div>
+
+  <!-- ══ END ══ -->
+  <div id="screen-end" class="screen">
+    <h1>Game Over</h1>
+    <p class="sub">Final results</p>
+    <div class="card end-card">
+      <p class="end-score-label">Your score</p>
+      <div class="final-score-big" id="my-final-score">0</div>
+      <p id="my-rank-label" class="my-rank-label"></p>
+      <div id="final-lb"></div>
+    </div>
+    <button class="primary" onclick="playAgain()">Play Again</button>
+  </div>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+
+  <!-- Game data & logic — order matters -->
+  <script src="words.js"></script>
+  <script src="script.js"></script>
+
+</body>
+</html>
