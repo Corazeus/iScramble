@@ -228,6 +228,17 @@ function handlePlaying(room) {
 
   const me = (room.players || {})[myId];
   if (me) document.getElementById('my-score').textContent = me.score;
+
+
+  // If all players have answered - proceed to next word
+  const players = room.players || {};
+  const allAnswered = Object.values(players).length > 0 && Object.values(players).every(p => p.answered);
+
+  if (allAnswered && isHost && !advanceScheduled) {
+    advanceScheduled = true;
+    clearInterval(timerLoop);
+    advanceTimeout = setTimeout(() => moveToResults(room), 800);
+  }
 }
 
 function renderWord(w) {
