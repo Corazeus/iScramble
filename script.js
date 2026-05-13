@@ -17,7 +17,6 @@ const firebaseConfig = {
 //  Used for AI word generation.
 // ══════════════════════════════════════════════
 const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + GEMINI_API_KEY;
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -236,7 +235,7 @@ async function generateAIWords() {
 
   try {
     const response = await fetch(
-      GEMINI_URL,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
