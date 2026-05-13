@@ -20,13 +20,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Inject Gemini API key
-        run: |
-          node -e "
-            const fs = require('fs');
-            let content = fs.readFileSync('script.js', 'utf8');
-            content = content.replace('MY_GEMINI_API_KEY', '${{ secrets.GEMINI_API_KEY }}');
-            fs.writeFileSync('script.js', content);
-          "
+        run: sed -i "s/YOUR_GEMINI_API_KEY/${{ secrets.GEMINI_API_KEY }}/g" script.js
 
       - name: Setup Pages
         uses: actions/configure-pages@v4

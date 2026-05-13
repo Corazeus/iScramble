@@ -16,8 +16,8 @@ const firebaseConfig = {
 //  AI CONFIG
 //  Used for AI word generation.
 // ══════════════════════════════════════════════
-const MY_GEMINI_API_KEY = "MY_GEMINI_API_KEY";
-const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + MY_GEMINI_API_KEY;
+const GEMINI_API_KEY = "YOUR_GEMINI_API_KEY";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + GEMINI_API_KEY;
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
