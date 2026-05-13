@@ -17,7 +17,8 @@ const firebaseConfig = {
 //  AI PROXY CONFIG
 //  Used for AI word generation.
 // ══════════════════════════════════════════════
-const AI_PROXY_URL = "https://iscramble-proxy.ruizrenzeus.workers.dev";
+const GEMINI_API_KEY = "MY_GEMINI_API_KEY";
+const GEMINI_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=" + GEMINI_API_KEY;
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
@@ -235,11 +236,17 @@ async function generateAIWords() {
   [{"word":"CAT","scrambled":"TAC","difficulty":"easy","hint":"A small domesticated animal"},{"word":"EVIL","scrambled":"VLEI","difficulty":"medium","hint":"A morally wrong action"},{"word":"LIVER","scrambled":"VLEIR","difficulty":"hard","hint":"An organ that detoxifies chemicals and metabolizes drugs"}]`;
 
   try {
-    const response = await fetch(AI_PROXY_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt }),
-    });
+    const response = await fetch(
+      GEMINI_URL,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { temperature: 0.7, maxOutputTokens: 1500 },
+        }),
+      }
+    );
 
     if (!response.ok) {
       const err = await response.json();
