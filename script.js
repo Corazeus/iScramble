@@ -1,6 +1,5 @@
 // ══════════════════════════════════════════════
 //  FIREBASE CONFIG
-//  Paste your Firebase project values here.
 // ══════════════════════════════════════════════
 const firebaseConfig = {
   apiKey: "AIzaSyDshwv5XbkGUXGavZQURP6AOHWY2-qGI8A",
@@ -14,7 +13,7 @@ const firebaseConfig = {
 };
 
 // ══════════════════════════════════════════════
-//  AI PROXY CONFIG
+//  AI CONFIG
 //  Used for AI word generation.
 // ══════════════════════════════════════════════
 const GEMINI_API_KEY = "MY_GEMINI_API_KEY";
