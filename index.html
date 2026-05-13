@@ -3,15 +3,19 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Coding Scramble — Multiplayer</title>
+  <title>iScramble — Multiplayer</title>
   <link rel="stylesheet" href="style.css" />
+  <!-- Browser Tab Icon -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <!-- iOS Home Screen Icon -->
+  <link rel="apple-touch-icon" href="favicon.png" />
 </head>
 <body>
 
   <!-- ══ SETUP ══ -->
   <div id="screen-setup" class="screen active">
     <h1>iScramble</h1>
-    <p class="sub">Guess the scrambled words</p>
+    <p class="sub">Race to unscramble the words!</p>
     <div class="card">
       <label for="name-input">Your name</label>
       <input id="name-input" type="text" placeholder="e.g. Alice" maxlength="20" />
@@ -24,6 +28,105 @@
     </div>
   </div>
 
+  <!-- ══ WORD MODE ══ -->
+  <div id="screen-wordmode" class="screen">
+    <h1>Word Mode</h1>
+    <p class="sub">Choose how to set up the words for this game</p>
+
+    <div class="mode-card" onclick="selectDefault()">
+      <div class="mode-icon">📋</div>
+      <div class="mode-body">
+        <div class="mode-title">Default Words</div>
+        <div class="mode-desc">Use the built-in 15 terms across Easy, Medium, and Hard.</div>
+      </div>
+      <div class="mode-arrow">→</div>
+    </div>
+
+    <div class="mode-card" onclick="selectCustom()">
+      <div class="mode-icon">✏️</div>
+      <div class="mode-body">
+        <div class="mode-title">Custom Words</div>
+        <div class="mode-desc">Add your own words, hints, and difficulty levels.</div>
+      </div>
+      <div class="mode-arrow">→</div>
+    </div>
+
+    <div class="mode-card" onclick="selectAI()">
+      <div class="mode-icon">🤖</div>
+      <div class="mode-body">
+        <div class="mode-title">AI Generated</div>
+        <div class="mode-desc">Pick a topic and let AI generate a fresh set of words.</div>
+      </div>
+      <div class="mode-arrow">→</div>
+    </div>
+
+    <button onclick="showScreen('screen-setup')" style="margin-top:0.5rem;">← Back</button>
+  </div>
+
+  <!-- ══ CUSTOM WORDS ══ -->
+  <div id="screen-custom" class="screen">
+    <h1>Custom Words</h1>
+    <p class="sub">Add at least 3 words. Scramble is generated automatically.</p>
+
+    <div class="card">
+      <label>Word <span id="custom-word-count" class="count-badge">0 added</span></label>
+      <input id="custom-word-input" type="text" placeholder="e.g. DOG" maxlength="20" class="custom-word-input" />
+      <label>Hint</label>
+      <input id="custom-hint-input" type="text" placeholder="e.g. A man's best friend" maxlength="80" />
+      <label>Difficulty</label>
+      <select id="custom-diff-input" class="select-input">
+        <option value="easy">Easy</option>
+        <option value="medium" selected>Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+      <button onclick="addCustomWord()">+ Add Word</button>
+      <div id="custom-error" class="error-msg"></div>
+    </div>
+
+    <div id="custom-word-list"></div>
+
+    <button class="primary" id="custom-start-btn" onclick="submitCustomWords()" disabled>
+      Continue with these words →
+    </button>
+    <button onclick="showScreen('screen-wordmode')" style="margin-top:8px;">← Back</button>
+  </div>
+
+  <!-- ══ AI TOPIC ══ -->
+  <div id="screen-ai" class="screen">
+    <h1>AI Generated</h1>
+    <p class="sub">Pick a topic and AI will generate 15 scrambled words.</p>
+    <div class="card">
+      <label>Topic</label>
+      <input id="ai-topic-input" type="text" placeholder="e.g. Games, Movies, Kid Friendly, Maximum of 10 letters" maxlength="50" />
+      <label>Difficulty mix</label>
+      <select id="ai-mix-input" class="select-input">
+        <option value="balanced">Balanced (5 Easy, 5 Medium, 5 Hard)</option>
+        <option value="easy-heavy">Easy-heavy (8 Easy, 4 Medium, 3 Hard)</option>
+        <option value="hard-heavy">Hard-heavy (3 Easy, 4 Medium, 8 Hard)</option>
+      </select>
+      <button class="primary" id="ai-generate-btn" onclick="generateAIWords()">✨ Generate Words</button>
+      <div id="ai-error" class="error-msg"></div>
+    </div>
+
+    <!-- Loading state -->
+    <div id="ai-loading" style="display:none;text-align:center;padding:2rem;">
+      <div class="spinner"></div>
+      <p style="font-size:14px;color:#888780;margin-top:1rem;">Generating words…</p>
+    </div>
+
+    <!-- Preview -->
+    <div id="ai-preview" style="display:none;">
+      <div class="card">
+        <div class="lb-header" style="margin-bottom:12px;">Generated words — click ✕ to remove any</div>
+        <div id="ai-word-chips"></div>
+      </div>
+      <button class="primary" onclick="submitAIWords()">Use these words →</button>
+      <button onclick="generateAIWords()" style="margin-top:8px;">↺ Regenerate</button>
+    </div>
+
+    <button onclick="showScreen('screen-wordmode')" style="margin-top:8px;">← Back</button>
+  </div>
+
   <!-- ══ LOBBY ══ -->
   <div id="screen-lobby" class="screen">
     <h1>Waiting Room</h1>
@@ -31,6 +134,10 @@
     <div class="card">
       <label>Room code — share this with teammates</label>
       <div class="room-code-big" id="lobby-code">----</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:1rem;">
+        <span id="lobby-mode-badge" class="badge easy">Default</span>
+        <span style="font-size:13px;color:#888780;" id="lobby-mode-label">Built-in coding words</span>
+      </div>
       <div class="lb-header" style="margin-bottom:10px;">Players joined</div>
       <ul class="player-list" id="lobby-players"></ul>
     </div>
@@ -42,24 +149,24 @@
   <div id="screen-game" class="screen">
     <div class="topbar">
       <div>Score: <strong id="my-score">0</strong></div>
-      <div>Word <strong id="word-num">1</strong> / 15</div>
+      <div>Word <strong id="word-num">1</strong> / <span id="word-total">15</span></div>
       <div>Time: <strong id="timer-display">—</strong>s</div>
     </div>
     <div class="progress-track">
       <div class="progress-fill" id="progress-fill" style="width:6.67%"></div>
     </div>
 
-    <!-- Word card -->
     <div class="card" id="word-card">
       <div class="word-card-header">
         <span id="diff-badge" class="badge easy">Easy</span>
       </div>
-      <p class="word-prompt">Unscramble this coding term:</p>
+      <p class="word-prompt" id="word-prompt">Unscramble the word:</p>
       <div class="scramble-row" id="scramble-row"></div>
       <div class="hint-text" id="hint-text"></div>
       <div class="result-text" id="result-text"></div>
       <div class="input-row" id="input-row">
-        <input id="answer-input" type="text" placeholder="Type your answer…" autocomplete="off" autocorrect="off" spellcheck="false" class="answer-input" />
+        <input id="answer-input" type="text" placeholder="Type your answer…"
+          autocomplete="off" autocorrect="off" spellcheck="false" class="answer-input" />
         <button onclick="submitAnswer()">Submit</button>
       </div>
       <div class="action-row" id="action-row">
@@ -68,7 +175,6 @@
       </div>
     </div>
 
-    <!-- Results phase (between words) -->
     <div id="results-phase" style="display:none;">
       <div class="results-banner">
         <div class="results-word" id="results-word"></div>
@@ -77,7 +183,6 @@
       </div>
     </div>
 
-    <!-- Live leaderboard -->
     <div class="card">
       <div class="lb-header">Live standings</div>
       <div id="lb-rows"></div>
