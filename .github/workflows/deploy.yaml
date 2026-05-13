@@ -24,13 +24,14 @@ jobs:
           API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: sed -i "s|YOUR_GEMINI_API_KEY|${API_KEY}|g" script.js
 
-      - name: Verify injection worked
+      - name: Verify injection
         run: |
           if grep -q "YOUR_GEMINI_API_KEY" script.js; then
-            echo "ERROR: Key was NOT replaced - placeholder still in file"
+            echo "ERROR: Not replaced"
             exit 1
           else
-            echo "SUCCESS: Placeholder was replaced"
+            echo "SUCCESS: Key injected"
+          fi
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
